@@ -24,9 +24,31 @@ function renderMessages(messages) {
   })
 }
 
+function addMessage(user, userChat) {
+  const req = fetch(`${api}:${port}/post`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      user: user,
+      Messages: userChat,
+    }),
+  })
+}
+
 async function main() {
   const Messages = await fetchMessage()
   renderMessages(Messages)
+  const user = document.querySelector('.main_chat_user')
+  const userChat = document.querySelector('.main_chat_message')
+  const sendButton = document.querySelector('.send')
+  sendButton.addEventListener('click', () => {
+    addMessage(user, userChat)
+    main()
+    event.preventDefault()
+  })
 }
 
 main()
