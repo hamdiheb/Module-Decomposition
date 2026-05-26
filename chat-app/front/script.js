@@ -1,4 +1,4 @@
-const ws = new WebSocket('wss://wg6lkxxgxkkr95j2v3byqk7i.178.105.39.91.sslip.io')
+const ws = new WebSocket('wss://nmmkmh5cqmujtouo92qxvoec.178.105.39.91.sslip.io')
 
 const mine = true
 // function socket(ws) {}
