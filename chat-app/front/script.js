@@ -1,52 +1,35 @@
-const api = 'http://localhost'
-const port = 3000
+const ws = new WebSocket('ws://localhost:3000')
 
-async function fetchMessage() {
-  const req = await fetch(`${api}:${port}/get`)
-  const res = await req.json()
-  return res
+function socket(ws) {}
+
+function messageComponent(user, text) {
+  const message = document.querySelector('.main_chat_section')
+  const article = document.createElement('article')
+  const title = document.createElement('h1')
+  const chat = document.createElement('p')
+
+  title.innerText = user
+  chat.innerText = text
+
+  article.append(title, chat)
+  message.append(article)
 }
 
-function renderMessages(messages) {
-  const messagesSection = document.querySelector('.main_chat_section')
-  messages.forEach((element) => {
-    const { user, Messages } = element
-    const messageArticle = document.createElement('article')
+function sendMessage() {
+  const user = document.querySelector('.main_chat_user').value
+  const text = document.querySelector('.main_chat_message').value
 
-    const userName = document.createElement('h3')
-    const userMessage = document.createElement('p')
-
-    userName.innerText = user
-    userMessage.innerText = Messages
-
-    messageArticle.append(userName, userMessage)
-    messagesSection.append(messageArticle)
-  })
+  ws.send(JSON.stringify({ user, text }))
 }
 
-function addMessage(user, userChat) {
-  const req = fetch(`${api}:${port}/post`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      user: user,
-      Messages: userChat,
-    }),
-  })
-}
-
-async function main() {
-  const Messages = await fetchMessage()
-  renderMessages(Messages)
-  const user = document.querySelector('.main_chat_user')
-  const userChat = document.querySelector('.main_chat_message')
-  const sendButton = document.querySelector('.send')
-  sendButton.addEventListener('click', () => {
-    addMessage(user, userChat)
-    main()
+function main() {
+  ws.onmessage = ({ data }) => {
+    const message = JSON.parse(data)
+    messageComponent(message.user, message.text)
+  }
+  const button = document.querySelector('.send')
+  button.addEventListener('click', (event) => {
+    sendMessage()
     event.preventDefault()
   })
 }
