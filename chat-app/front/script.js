@@ -1,4 +1,4 @@
-const ws = new WebSocket('ws://localhost:3000')
+const ws = new WebSocket('ws://nmmkmh5cqmujtouo92qxvoec.178.105.39.91.sslip.io')
 const mine = true
 // function socket(ws) {}
 
