@@ -1,31 +1,37 @@
 const ws = new WebSocket('ws://localhost:3000')
+const mine = true
+// function socket(ws) {}
 
-function socket(ws) {}
+function messageComponent(user, text, mine) {
+  const messages = document.querySelector('.main_chat_section')
 
-function messageComponent(user, text) {
-  const message = document.querySelector('.main_chat_section')
   const article = document.createElement('article')
-  const title = document.createElement('h1')
-  const chat = document.createElement('p')
+  article.className = `message${mine ? ' mine' : ''}`
 
-  title.innerText = user
-  chat.innerText = text
+  const username = document.createElement('div')
+  username.className = 'username'
+  username.textContent = user
 
-  article.append(title, chat)
-  message.append(article)
+  const bubble = document.createElement('div')
+  bubble.className = 'bubble'
+  bubble.textContent = text
+  mine = false
+  article.appendChild(username)
+  article.appendChild(bubble)
+  messages.appendChild(article)
 }
 
 function sendMessage() {
   const user = document.querySelector('.main_chat_user').value
   const text = document.querySelector('.main_chat_message').value
-
-  ws.send(JSON.stringify({ user, text }))
+  const id = self.crypto.randomUUID()
+  ws.send(JSON.stringify({ user, text, id }))
 }
 
 function main() {
   ws.onmessage = ({ data }) => {
     const message = JSON.parse(data)
-    messageComponent(message.user, message.text)
+    messageComponent(message.user, message.text, mine)
   }
   const button = document.querySelector('.send')
   button.addEventListener('click', (event) => {
