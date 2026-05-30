@@ -1,4 +1,5 @@
-const ws = new WebSocket('ws://nmmkmh5cqmujtouo92qxvoec.178.105.39.91.sslip.io/')
+const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+const ws = new WebSocket(`${protocol}//${window.location.hostname}:3000`)
 
 ws.onerror = (error) => {
   console.error('WebSocket error:', error)
