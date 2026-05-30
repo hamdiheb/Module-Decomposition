@@ -1,5 +1,5 @@
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-const ws = new WebSocket(`${protocol}//${window.location.hostname}:3000`)
+const ws = new WebSocket(`${protocol}//${window.location.hostname}`)
 
 ws.onerror = (error) => {
   console.error('WebSocket error:', error)
