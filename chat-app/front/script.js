@@ -1,4 +1,12 @@
-const ws = new WebSocket('wss://nmmkmh5cqmujtouo92qxvoec.178.105.39.91.sslip.io')
+const ws = new WebSocket('ws://nmmkmh5cqmujtouo92qxvoec.178.105.39.91.sslip.io/')
+
+ws.onerror = (error) => {
+  console.error('WebSocket error:', error)
+}
+
+ws.onclose = (event) => {
+  console.log('Closed — code:', event.code, 'reason:', event.reason)
+}
 
 const mine = true
 // function socket(ws) {}
@@ -23,6 +31,11 @@ function messageComponent(user, text, mine) {
 }
 
 function sendMessage() {
+  if (ws.readyState !== 1) {
+    console.log('Socket not ready, state:', ws.readyState)
+    return
+  }
+
   const user = document.querySelector('.main_chat_user').value
   const text = document.querySelector('.main_chat_message').value
   const id = self.crypto.randomUUID()
